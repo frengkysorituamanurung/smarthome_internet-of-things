@@ -1,0 +1,196 @@
+[
+    {
+        "id": "d193f993d6646299",
+        "type": "tab",
+        "label": "Flow 4",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "0ac524feeed4f3e1",
+        "type": "change",
+        "z": "d193f993d6646299",
+        "name": "Generating Data",
+        "rules": [
+            {
+                "t": "set",
+                "p": "Temperature",
+                "pt": "global",
+                "to": "",
+                "tot": "num",
+                "dc": true
+            },
+            {
+                "t": "set",
+                "p": "Humidity",
+                "pt": "global",
+                "to": "",
+                "tot": "num"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 600,
+        "y": 280,
+        "wires": [
+            [
+                "57d697ef53981a21",
+                "622ea38dc478512f"
+            ]
+        ]
+    },
+    {
+        "id": "57d697ef53981a21",
+        "type": "influxdb out",
+        "z": "d193f993d6646299",
+        "influxdb": "f12bbf987d5a9b9a",
+        "name": "",
+        "measurement": "Smart_Home_Meter_2",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "s",
+        "retentionPolicyV18Flux": "",
+        "org": "Kel07_IoT",
+        "bucket": "smart_home_2",
+        "x": 890,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "697907d5277bc805",
+        "type": "function",
+        "z": "d193f993d6646299",
+        "name": "Generate Payload",
+        "func": "let data = {\n    Temperature : msg.payload.Temperature,\n    Humidity : msg.payload.Humidity\n};\n\nreturn {\n    payload: data\n}",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 280,
+        "wires": [
+            [
+                "0ac524feeed4f3e1"
+            ]
+        ]
+    },
+    {
+        "id": "d1200152791b0211",
+        "type": "mqtt in",
+        "z": "d193f993d6646299",
+        "name": "MQTT Input",
+        "topic": "local/",
+        "qos": "2",
+        "datatype": "auto",
+        "broker": "e872e4642c70c242",
+        "nl": false,
+        "rap": false,
+        "inputs": 0,
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "fdc4e3eed66d4896"
+            ]
+        ]
+    },
+    {
+        "id": "fdc4e3eed66d4896",
+        "type": "json",
+        "z": "d193f993d6646299",
+        "name": "Parser",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 310,
+        "y": 200,
+        "wires": [
+            [
+                "697907d5277bc805"
+            ]
+        ]
+    },
+    {
+        "id": "622ea38dc478512f",
+        "type": "debug",
+        "z": "d193f993d6646299",
+        "name": "debug 33",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "payload",
+        "targetType": "msg",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 820,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "f12bbf987d5a9b9a",
+        "type": "influxdb",
+        "hostname": "192.168.43.44",
+        "port": "8086",
+        "protocol": "http",
+        "database": "database",
+        "name": "IoT_07",
+        "usetls": false,
+        "tls": "d44d4b0d38962c39",
+        "influxdbVersion": "2.0",
+        "url": "http://192.168.43.44:8086",
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "e872e4642c70c242",
+        "type": "mqtt-broker",
+        "name": "EMQX-Local",
+        "broker": "192.168.43.44",
+        "port": "1883",
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": "4",
+        "keepalive": "60",
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "d44d4b0d38962c39",
+        "type": "tls-config",
+        "name": "emq",
+        "cert": "",
+        "key": "",
+        "ca": "",
+        "certname": "",
+        "keyname": "",
+        "caname": "emqxsl-ca.crt",
+        "servername": "",
+        "verifyservercert": true,
+        "alpnprotocol": ""
+    }
+]
